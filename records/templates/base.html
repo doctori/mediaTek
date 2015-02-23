@@ -26,7 +26,7 @@
             <div class="text-center">
                 <h1>{% block header_text %}{% endblock %}</h1>
 
-                {% block list_form %}
+                {% block record_form %}
                 <form method="POST" action="{% block form_action %}{% endblock %}">
                     {{ form.text }}
                     {% csrf_token %}

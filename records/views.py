@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.core.exceptions import ValidationError
 from records.forms import (
 	RecordForm, EMPTY_ITEM_ERROR,
@@ -11,7 +11,7 @@ def home_page(request):
 
 def view_record(request,record_id):
 	#We retrieve the list object from the URL
-	record = Record.objects.get(id=list_id)
+	record = Record.objects.get(id=record_id)
 	form = ExistingRecordItemForm(for_record=record)
 	if request.method == 'POST':
 		form = ExistingRecordItemForm(for_record=record,data=request.POST)
@@ -24,7 +24,7 @@ def new_record(request):
 	form = RecordForm(data=request.POST)
 	if form.is_valid():
 		record = Record.objects.create()
-		form.save(for_record=record)
+		form.save(for_artist=artist)
 		return redirect(record)
 	else:
 		return render(request, 'home.html',{"form":form})
