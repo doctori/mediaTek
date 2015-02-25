@@ -1,5 +1,6 @@
 from django.core.urlresolvers import resolve
 from django.test import TestCase
+from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from unittest import skip
 from records.models import Record, Artist
@@ -11,6 +12,35 @@ class ArtistAndRecordsModelsTest(TestCase):
 	def test_default_text(self):
 		record = Record()
 		self.assertEqual(record.name, '')
+		
+	def test_record_attributes_are_created(self):
+		record = Record(
+			name = 'Invaders Must Die',
+			artist = 'The Prodigy',
+			year = 2012,
+			ean = 711297880113)
+		record.save()
+		self.assertIn(record.name,'Invaders Must Die')
+		self.assertIn(record.artist,'The Prodigy')
+		self.assertIn(str(record.year),'2012')
+		self.assertIn(str(record.ean),str(711297880113))
+		
+	def test_record_ean_is_unique(self):
+		record1 = Record(
+			name = 'Invaders Must Die',
+			artist = 'The Prodigy',
+			year = 2012,
+			ean = 711297880114)
+		record1.save()
+		record1.full_clean()
+		
+		record2 = Record(
+			name = 'Invaders Must Dive',
+			artist = 'The Prodigy',
+			year = 2016,
+			ean = 711297880114)
+		with self.assertRaises(IntegrityError):
+			record2.save()
 	@skip
 	def test_record_is_related_to_artist(self):
 		artist = Artist.objects.create(name='artist1')
@@ -66,4 +96,5 @@ class RecordModelTest(TestCase):
 		artist = Artist.objects.create(name='artist1')
 		record = Record.objects.create(name='Am I readable ?')
 		self.assertEqual(record.get_absolute_url(), '/records/%d/' % (record.id,))
+	
 	

@@ -30,8 +30,21 @@ class RecordViewTest(TestCase):
 		record = Record.objects.create(name="record1")
 		response = self.client.get('/records/%d/' % (record.id,))
 		self.assertIsInstance(response.context['form'], ExistingRecordItemForm)
-		self.assertContains(response, 'record1')
-	
+		self.assertContains(response, record.name)
+	def test_displays_record_full_desc(self):
+		record = Record.objects.create(
+			name="record1",
+			year=2012,
+			artist='Prodigy',
+			ean=711297880113
+			)
+		response = self.client.get('/records/%d/' % (record.id,))
+		self.assertContains(response, record.name)
+		self.assertContains(response, record.year)
+		self.assertContains(response, record.artist)
+		self.assertContains(response, record.ean)
+		
+		
 	#A voir après l'ajout de la gestion des artistes
 	@skip
 	def test_can_save_a_POST_request_to_an_existing_list(self):
@@ -114,15 +127,18 @@ class RecordViewTest(TestCase):
 		self.assertEqual(Item.objects.all().count(),1)
 		
 class NewRecordTest(TestCase):
-	@skip
 	def test_saving_a_POST_request(self):
-		artist = Artist.objects.create(name='artist1')
+		recordsNb = Record.objects.count()
 		self.client.post(
 			'/records/new',
-			data={'name': 'Records102',
-					'artist':artist }
+			data={
+			'name': 'Records102',
+			'year':2010,
+			'artist':'dada',
+			'ean':545435456
+			}
         )
-		self.assertEqual(Record.objects.count(), 1)
+		self.assertEqual(Record.objects.count(), recordsNb+1)
 		new_record = Record.objects.first()
 		self.assertEqual(new_record.name, 'Records102')
 	@skip

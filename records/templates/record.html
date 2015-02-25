@@ -5,8 +5,8 @@
 
 {% block table %}
     <table id="id_list_table" class="table">
-        {% for item in records.objects.all %}
-            <tr><td>{{ forloop.counter }}: {{ item.name }}</td></tr>
+        {% for field in form %}
+            <tr><td>{{ field.name }}: {{ field.value }}</td></tr>
         {% endfor %}
     </table>
 {% endblock %}

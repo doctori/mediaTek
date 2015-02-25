@@ -13,6 +13,12 @@ class Artist(models.Model):
 		
 class Record(models.Model):
 	name = models.TextField(default='')
+	ean = models.BigIntegerField(
+		unique=True,
+		verbose_name='EAN Code or any code that could identify the Item',
+		default=0)
+	year = models.PositiveSmallIntegerField(default=2000)
+	artist = models.TextField(default='')
 	id = models.AutoField(primary_key=True)
 	class Meta:
 		ordering = ('id',)

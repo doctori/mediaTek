@@ -14,7 +14,11 @@ class RecordFormTest(TestCase):
 		self.assertIn('class="form-control input-lg"', form.as_p())
 
 	def test_form_validation_for_blank_items(self):
-		form = RecordForm(data={'name':''})
+		form = RecordForm(data={
+			'name':'',
+			'year':'',
+			'artist':'',
+			'ean':''})
 		self.assertFalse(form.is_valid())
 		self.assertEqual(
 			form.errors['name'],
@@ -22,7 +26,11 @@ class RecordFormTest(TestCase):
 		)
 	def test_form_save_handles_saving_item_to_a_list(self):
 		artist = Artist.objects.create(name='artist1')
-		form = RecordForm(data={'name':'save me'})
+		form = RecordForm(data={
+			'name':'save me',
+			'year':2010,
+			'artist':'dada',
+			'ean':545435456})
 		new_item = form.save()
 		self.assertEqual(new_item, Record.objects.first())
 		self.assertEqual(new_item.name, 'save me')

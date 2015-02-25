@@ -7,7 +7,7 @@ DUPLICATE_ITEM_ERROR = "L'element existe déjà"
 class RecordForm(forms.models.ModelForm):
 	class Meta:
 		model = Record
-		fields = ('name',)
+		fields = ('name','year','artist','ean')
 		widgets= {
 			'name': forms.fields.TextInput(attrs={
 			'placeholder': 'Name of the Record',
