@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 
 class Artist(models.Model):
 	name = models.TextField(default='')
+	id = models.AutoField(primary_key=True)
 	class Meta:
 		ordering = ('id',)
 	def __str__(self):
@@ -12,11 +13,10 @@ class Artist(models.Model):
 		
 class Record(models.Model):
 	name = models.TextField(default='')
-	artist = models.ForeignKey(Artist,default=None)
-	
+	id = models.AutoField(primary_key=True)
 	class Meta:
 		ordering = ('id',)
-		unique_together = ('artist','name')
+		#unique_together = ('artist','name')
 	def __str__(self):
 		return self.name
 	

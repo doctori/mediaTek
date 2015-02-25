@@ -12,7 +12,7 @@
 <div class="container">
 
     <nav class="navbar navbar-default" role="navigation">
-        <a class="navbar-brand" href="/">Superlists</a>
+        <a class="navbar-brand" href="/">MediaTek</a>
         {% if user.email %}
            <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
             <span class="navbar-text navbar-right">Logged in as {{ user.email }}</span>
@@ -28,8 +28,9 @@
 
                 {% block record_form %}
                 <form method="POST" action="{% block form_action %}{% endblock %}">
-                    {{ form.text }}
+                  
                     {% csrf_token %}
+					  {{ form }}
                     {% if form.errors %}
                         <div class="form-group has-error">
                             <div class="help-block">{{ form.text.errors }}</div>
@@ -62,7 +63,7 @@
 <script src="/static/accounts.js"></script>
 <script src="/static/list.js"></script>
 <script>
-    /*global $, Superlists, navigator */
+    /*global $, mediaTek, navigator */
     $(document).ready(function () {
         var user = "{{ user.email }}" || null;
         var token = "{{ csrf_token }}";
@@ -70,7 +71,7 @@
             login: "{% url 'persona_login' %}",
             logout: "TODO",
         };
-        Superlists.Accounts.initialize(navigator, user, token, urls);
+        mediaTek.Accounts.initialize(navigator, user, token, urls);
     });
 </script>
 </body>

@@ -23,10 +23,10 @@ class RecordFormTest(TestCase):
 	def test_form_save_handles_saving_item_to_a_list(self):
 		artist = Artist.objects.create(name='artist1')
 		form = RecordForm(data={'name':'save me'})
-		new_item = form.save(for_artist=artist)
+		new_item = form.save()
 		self.assertEqual(new_item, Record.objects.first())
 		self.assertEqual(new_item.name, 'save me')
-		self.assertEqual(new_item.artist, artist)
+		
 @skip
 class ExistingListItemFormTest(TestCase):
 	
