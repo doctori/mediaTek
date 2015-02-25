@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block header_text %}{% record.id %}{% endblock %}
+{% block header_text %}{{ record.name }}{% endblock %}
 {% block form_action %}{% url 'view_record' record.id %}{% endblock %}
 
 {% block table %}

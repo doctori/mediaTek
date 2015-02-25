@@ -20,7 +20,6 @@ class RecordViewTest(TestCase):
 		
 	def test_validation_errors_are_shown_on_home_page(self):
 		response = self.client.post('/records/new', data={'name':''})
-		print(response.content)
 		self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 	
 	def test_for_invalid_input_passes_form_to_template(self):
@@ -31,7 +30,7 @@ class RecordViewTest(TestCase):
 		record = Record.objects.create(name="record1")
 		response = self.client.get('/records/%d/' % (record.id,))
 		self.assertIsInstance(response.context['form'], ExistingRecordItemForm)
-		self.assertContains(response, 'name="record1"')
+		self.assertContains(response, 'record1')
 	
 	#A voir après l'ajout de la gestion des artistes
 	@skip
