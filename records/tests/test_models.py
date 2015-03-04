@@ -48,6 +48,27 @@ class ArtistAndRecordsModelsTest(TestCase):
 		record.artist = artist
 		record.save()
 		self.assertIn(record, artist.record_set.all())
+		
+	def test_cannot_save_empty_artist_in_record(self):
+		artistName = ''
+		record = Record(
+			name = 'Invaders Must Dive',
+			artist = artistName,
+			year = 2016,
+			ean = 711297880114)
+		with self.assertRaises(ValidationError):
+			record.save()
+			record.full_clean()
+	def test_cannot_save_empty_ean_in_record(self):
+		artistName = 'The Prodigy'
+		record = Record(
+			name = 'Invaders Must Dive',
+			artist = artistName,
+			year = 2016,
+			ean = '' )
+		with self.assertRaises(ValidationError):
+			record.save()
+			record.full_clean()
 	@skip
 	def test_cannot_save_empty_artist_name(self):
 		artist = Artist.objects.create(name='')
