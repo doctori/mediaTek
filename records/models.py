@@ -10,6 +10,8 @@ class Artist(models.Model):
 		return self.name
 	def get_absolute_url(self):
 		return reverse('view_artist',args=[self.id])
+	def records_set(self):
+		return Record.objects.filter(artist=self)
 		
 class Record(models.Model):
 	name = models.TextField(default='')
@@ -25,7 +27,7 @@ class Record(models.Model):
 	id = models.AutoField(primary_key=True)
 	class Meta:
 		ordering = ('id',)
-		#unique_together = ('artist','name')
+		unique_together = ('artist','name')
 	def __str__(self):
 		return self.name
 	
