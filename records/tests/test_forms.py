@@ -78,7 +78,7 @@ class ExistingRecordFormTest(TestCase):
 class ArtistFormTest(TestCase):
 	def test_form_render_artist_text_input(self):
 		form = ArtistForm()
-		self.assertIn('placeholder="Name of The Artist"',form.as_p())
+		self.assertIn('placeholder="Name of the Artist"',form.as_p())
 		self.assertIn('class="form-control input-lg"',form.as_p())
 	
 	def test_form_validation_for_blank_items(self):
@@ -90,3 +90,11 @@ class ArtistFormTest(TestCase):
 			form.errors['name'],
 			[EMPTY_ITEM_ERROR]
 		)
+	def test_save_handles_saving_artist(self):
+		form = ArtistForm(data={
+			'name':'The Prodigy'
+			})
+		new_artist=form.save()
+		self.assertEqual(new_artist, Artist.objects.last())
+		self.assertEqual(new_artist.name, 'The Prodigy')
+		

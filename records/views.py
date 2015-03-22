@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.core.exceptions import ValidationError
 from records.forms import (
-	RecordForm, EMPTY_ITEM_ERROR,
+	RecordForm,ArtistForm, EMPTY_ITEM_ERROR,
 	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm
 	)
 from records.models import Record, Artist
@@ -29,3 +29,10 @@ def new_record(request):
 		return redirect(record)
 	else:
 		return render(request, 'home.html',{"form":form})
+def view_artist(request,artist_id):
+	artist = get_object_or_404(Artist,id=artist_id)
+	form = ArtistForm(request.POST or None,instance=artist)
+	if form.is_valid():
+		form.save()
+		return redirect(artist)
+	return render(request, 'artist.html',{'artist':artist,'form':form})

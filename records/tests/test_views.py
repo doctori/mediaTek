@@ -19,7 +19,6 @@ class RecordViewTest(TestCase):
 		self.assertTemplateUsed(response, 'home.html')
 		
 	def test_validation_errors_are_shown_on_home_page(self):
-	
 		response = self.client.post('/records/new', data={'name':'','artist':''})
 		self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 	
@@ -51,49 +50,60 @@ class RecordViewTest(TestCase):
 		self.assertContains(response, record.ean)
 		
 		
-	#A voir après l'ajout de la gestion des artistes
-	@skip
-	def test_can_save_a_POST_request_to_an_existing_list(self):
+	def test_can_save_a_POST_request_to_an_existing_artist(self):
 		artist = Artist.objects.create(name='artist1')
 		correct_artist = Artist.objects.create(name='artist2')
 
 		self.client.post(
-			'/artists/%d/' % (correct_artist.id,),
-			data = {'name': 'New Record on Existing Artist'}
-			)
+			'/records/new',
+			data = {
+				'name': 'New Record on Existing Artist',
+				'artist': correct_artist.id,
+				'ean':711297880116,
+				'year': 2015
+			}
+		)
 			
 		self.assertEqual(Record.objects.count(),1)
 		new_item = Record.objects.first()
-		self.assertEqual(new_item.text,'New Record on Existing List')
-		self.assertEqual(new_item.list, correct_artist)
-	@skip
-	def test_POST_redirects_to_list_view(self):
-		other_record = Record.objects.create(name="record1")
-		correct_record = Record.objects.create(name="record2")
+		self.assertEqual(new_item.name,'New Record on Existing Artist')
+		self.assertEqual(new_item.artist, correct_artist)
+
+	def test_POST_redirects_to_records_view(self):
+		artist = Artist.objects.create(name='artist1')
+		other_record = Record.objects.create(name="record1",artist=artist)
+		correct_record = Record.objects.create(name="record2",artist=artist,ean=84160)
 		response = self.client.post(
 			'/records/%d/' % (correct_record.id),
-			data={'name': 'record2'}
+			data={
+			'name': correct_record.name,
+			'artist': correct_record.artist.id,
+			'ean':78418910918,
+			'year':1987,
+			}
 		)
-		new_record = Record.objects.last()
+		last_record = Record.objects.last()
 		self.assertRedirects(response,'/records/%d/' % (correct_record.id,))
-	@skip
-	def test_validation_errors_end_up_on_lists_pages(self):
+		self.assertEqual(last_record.id,correct_record.id)
+		
+
+	def test_validation_errors_end_up_on_records_pages(self):
 		artist = Artist.objects.create(name='artist1')
 		record = Record.objects.create(artist=artist,name="record1")
 		response = self.client.post(
 			'/records/%d/' % (record.id,),
 			data = {'name': '',
-					'artist_id': artist.id}
+					'artist': artist.id}
 		)
 		self.assertEqual(response.status_code,200)
 		self.assertTemplateUsed(response, 'record.html')
 		expected_error = escape(EMPTY_ITEM_ERROR)
 		self.assertContains(response, expected_error)
-	@skip
-	def test_passes_correct_list_to_template(self):
+
+	def test_passes_correct_record_to_template(self):
 		artist = Artist.objects.create(name='artist1')
-		other_record = Record.objects.create(artist=artist,name="record1")
-		correct_record = Record.objects.create(artist=artist,name="record2")
+		other_record = Record.objects.create(artist=artist,name="record1",ean=48181651)
+		correct_record = Record.objects.create(artist=artist,name="record2",ean=5646845)
 		response = self.client.get('/records/%d/' % (correct_record.id),)
 		self.assertEqual(response.context['record'],correct_record)
 	@skip
@@ -102,23 +112,7 @@ class RecordViewTest(TestCase):
 		record = Record.objects.create(artist=artist,name="record1")
 		response = self.client.get('/records/%d/' % (record.id,))
 		self.assertTemplateUsed(response,'record.html')
-	#After First ARtist Implementation
-	@skip
-	def test_displays_only_items_for_that_artist(self):
-		artist = Artist.objects.create(name='artist1')
-		first_record = List.objects.create()
-		Item.objects.create(text = 'item1',list=first_list)
-		Item.objects.create(text = 'item2',list=first_list)
-		second_list = List.objects.create()
-		Item.objects.create(text = 'item3',list=second_list)
-		Item.objects.create(text = 'item4',list=second_list)
-		
-		response = self.client.get('/records/%d/' % (first_list.id,))
-		
-		self.assertContains(response,'item1')
-		self.assertContains(response,'item2')
-		self.assertNotContains(response,'item3')
-		self.assertNotContains(response,'item4')
+
 	@skip	
 	def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
 		artist = Artist.objects.create(name='artist1')
@@ -186,6 +180,29 @@ class NewRecordTest(TestCase):
 		)
 		self.assertEqual(Item.objects.count(), 0)	
 		
+class ArtistViewTest(TestCase):
+	def test_displays_artist_full_desc(self):
+		artist1 = Artist.objects.create(
+			name='Prodigy'
+		)
+		artist1.save()
+		response = self.client.get('/artists/%d/' % (artist1.id))
+		self.assertContains(response, artist1.name)
+		
+	def test_displays_only_items_for_that_artist(self):
+		first_artist = Artist.objects.create(name='artist1')
+		Record.objects.create(name = 'item1',artist=first_artist,ean=12345)
+		Record.objects.create(name = 'item2',artist=first_artist,ean=12346)
+		second_artist = Artist.objects.create(name='artist2')
+		Record.objects.create(name = 'item3',artist=second_artist,ean=12347)
+		Record.objects.create(name = 'item4',artist=second_artist,ean=12348)
+		
+		response = self.client.get('/artists/%d/' % (first_artist.id,))
+		
+		self.assertContains(response,'item1')
+		self.assertContains(response,'item2')
+		self.assertNotContains(response,'item3')
+		self.assertNotContains(response,'item4')
 		
 class HomePageTest(TestCase):
 

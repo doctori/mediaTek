@@ -35,6 +35,7 @@ class ExistingArtistRecordForm(RecordForm):
 class ArtistForm(forms.models.ModelForm):
 	class Meta:
 		model = Artist
+		fields = ('name',)
 		widgets= {
 			'name': forms.fields.TextInput(attrs={
 			'placeholder': 'Name of the Artist',
