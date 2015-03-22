@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from unittest import skip
 from records.forms import (
 	RecordForm, EMPTY_ITEM_ERROR,
-	DUPLICATE_ITEM_ERROR,ExistingRecordItemForm
+	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm
 	)
 from records.models import Record, Artist
 
@@ -19,7 +19,8 @@ class RecordViewTest(TestCase):
 		self.assertTemplateUsed(response, 'home.html')
 		
 	def test_validation_errors_are_shown_on_home_page(self):
-		response = self.client.post('/records/new', data={'name':''})
+	
+		response = self.client.post('/records/new', data={'name':'','artist':''})
 		self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 	
 	def test_for_invalid_input_passes_form_to_template(self):
@@ -27,15 +28,20 @@ class RecordViewTest(TestCase):
 		self.assertIsInstance(response.context['form'],RecordForm)
 	
 	def test_displays_record_form(self):
-		record = Record.objects.create(name="record1")
+		artist = Artist.objects.create(name='dédé')
+		record = Record.objects.create(name="record1",artist=artist)
 		response = self.client.get('/records/%d/' % (record.id,))
-		self.assertIsInstance(response.context['form'], ExistingRecordItemForm)
+		self.assertIsInstance(response.context['form'], ExistingArtistRecordForm)
 		self.assertContains(response, record.name)
 	def test_displays_record_full_desc(self):
+		artist1 = Artist.objects.create(
+			name='Prodigy'
+		)
+		artist1.save()
 		record = Record.objects.create(
 			name="record1",
 			year=2012,
-			artist='Prodigy',
+			artist=artist1,
 			ean=711297880113
 			)
 		response = self.client.get('/records/%d/' % (record.id,))
@@ -52,7 +58,7 @@ class RecordViewTest(TestCase):
 		correct_artist = Artist.objects.create(name='artist2')
 
 		self.client.post(
-			'/records/%d/' % (correct_artist.id,),
+			'/artists/%d/' % (correct_artist.id,),
 			data = {'name': 'New Record on Existing Artist'}
 			)
 			
@@ -128,13 +134,15 @@ class RecordViewTest(TestCase):
 		
 class NewRecordTest(TestCase):
 	def test_saving_a_POST_request(self):
+		artist1 = Artist.objects.create(name='artist1')
+		artist1.save()
 		recordsNb = Record.objects.count()
 		self.client.post(
 			'/records/new',
 			data={
 			'name': 'Records102',
 			'year':2010,
-			'artist':'dada',
+			'artist':artist1.id,
 			'ean':545435456
 			}
         )

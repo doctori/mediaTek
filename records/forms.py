@@ -18,13 +18,11 @@ class RecordForm(forms.models.ModelForm):
 			'name': {'required':EMPTY_ITEM_ERROR}
 		}
 	def save(self):
-	#	self.instance.artist = for_artist
 		return super().save()
 		
-class ExistingRecordItemForm(RecordForm):
+class ExistingArtistRecordForm(RecordForm):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		#self.instance.artist = for_artist
 	def save(self):
 		return forms.models.ModelForm.save(self)
 	def validate_unique(self):
@@ -33,3 +31,18 @@ class ExistingRecordItemForm(RecordForm):
 		except ValidationError as e:
 			e.error_dict = {'name': [DUPLICATE_ITEM_ERROR]}
 			self._update_errors(e)
+
+class ArtistForm(forms.models.ModelForm):
+	class Meta:
+		model = Artist
+		widgets= {
+			'name': forms.fields.TextInput(attrs={
+			'placeholder': 'Name of the Artist',
+			'class': "form-control input-lg",
+			}),
+		}
+		error_messages = {
+			'name': {'required':EMPTY_ITEM_ERROR}
+		}
+		
+		

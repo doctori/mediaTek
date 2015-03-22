@@ -14,21 +14,27 @@ class ArtistAndRecordsModelsTest(TestCase):
 		self.assertEqual(record.name, '')
 		
 	def test_record_attributes_are_created(self):
+		artist1 = Artist.objects.create(
+			name = 'The Prodigy'
+		)
 		record = Record(
 			name = 'Invaders Must Die',
-			artist = 'The Prodigy',
+			artist = artist1,
 			year = 2012,
 			ean = 711297880113)
 		record.save()
 		self.assertIn(record.name,'Invaders Must Die')
-		self.assertIn(record.artist,'The Prodigy')
+		self.assertIn(record.artist.name,'The Prodigy')
 		self.assertIn(str(record.year),'2012')
 		self.assertIn(str(record.ean),str(711297880113))
 		
 	def test_record_ean_is_unique(self):
+		artist1 = Artist.objects.create(
+			name = 'The Prodigy'
+		)
 		record1 = Record(
 			name = 'Invaders Must Die',
-			artist = 'The Prodigy',
+			artist = artist1,
 			year = 2012,
 			ean = 711297880114)
 		record1.save()
@@ -36,33 +42,44 @@ class ArtistAndRecordsModelsTest(TestCase):
 		
 		record2 = Record(
 			name = 'Invaders Must Dive',
-			artist = 'The Prodigy',
+			artist = artist1,
 			year = 2016,
 			ean = 711297880114)
 		with self.assertRaises(IntegrityError):
 			record2.save()
 			
 	def test_record_is_related_to_artist(self):
-		artist = Artist.objects.create(name='artist1')
-		artist.save()
+		artist1 = Artist.objects.create(name='artist1')
+		artist1.save()
 		record = Record(
 			name = 'Invaders Must Dive',
-			artist = artist,
+			artist = artist1,
 			year = 2016,
 			ean = 711297880114
 		)
 		record.save()
-		self.assertIn(record, artist.records_set())
+		self.assertIn(record, artist1.records_set())
 
-
-	def test_cannot_save_empty_artist_in_record(self):
-		artistName = ''
+	def test_record_artist_is_object_artist(self):
+		artist1 = Artist.objects.create(name='artist1')
+		artist1.save()
 		record = Record(
 			name = 'Invaders Must Dive',
-			artist = artistName,
+			artist = artist1,
+			year = 2016,
+			ean = 711297880114
+		)
+		record.save()
+		record.full_clean()
+		self.assertEqual(type(artist1),type(Record.objects.last().artist))
+		
+	def test_cannot_save_empty_artist_in_record(self):
+		artist = Artist.objects.create(name='')
+		record = Record(
+			name = 'Invaders Must Dive',
 			year = 2016,
 			ean = 711297880114)
-		with self.assertRaises(ValidationError):
+		with self.assertRaises(IntegrityError):
 			record.save()
 			record.full_clean()
 	@skip	
@@ -83,35 +100,42 @@ class ArtistAndRecordsModelsTest(TestCase):
 			artist.full_clean()
 	@skip	
 	def test_cannot_save_empty_artist_item(self):
-		artist = Artist.objects.create(name='artist1')
-		record = Record(artist=artist,name='')
+		artist1 = Artist.objects.create(name='artist1')
+		record = Record(artist=artist1,name='')
 		with self.assertRaises(ValidationError):
 			record.save()
 			record.full_clean()
 			
 	def test_duplicate_records_are_invalid(self):
-		artist = Artist.objects.create(name='artist1')
+		artist1 = Artist.objects.create(name='artist1')
 		Record.objects.create(
-			artist=artist,
+			artist=artist1,
 			name='Am I Unique ?',
 			year = 2016,
 			ean = 23213230
 			)
 		with self.assertRaises(IntegrityError):
 			record = Record.objects.create(
-			artist=artist,
+			artist=artist1,
 			name='Am I Unique ?',
 			year = 2016,
 			ean = 23213230
 			)
 			record.full_clean()
 	
-	@skip
-	def test_CAN_save_item_to_different_lists(self):
+	def test_CAN_save_records_to_different_artists(self):
 		artist1 = Artist.objects.create(name='artist1')
 		artist2 = Artist.objects.create(name='artist2')
-		Record.objects.create(artist=artist1, name='Am I Unique ?')
-		record2 = Record(artist=artist2, name='Am I Unique ?')
+		Record.objects.create(
+			artist=artist1,
+			name='Am I Unique ?',
+			year = 2016,
+			ean = 232132121243
+			)
+		record2 = Record(artist=artist2,
+			name='Am I Unique ?',
+			year = 2016,
+			ean = 232132121323)
 		record2.full_clean() #Should pass
 	
 
@@ -144,7 +168,7 @@ class ArtistAndRecordsModelsTest(TestCase):
 class RecordModelTest(TestCase):
 	def test_get_absolute_url(self):
 		artist = Artist.objects.create(name='artist1')
-		record = Record.objects.create(name='Am I readable ?')
+		record = Record.objects.create(name='Am I readable ?',artist=artist)
 		self.assertEqual(record.get_absolute_url(), '/records/%d/' % (record.id,))
 	
 	def test_string_representation(self):

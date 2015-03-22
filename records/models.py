@@ -21,9 +21,10 @@ class Record(models.Model):
 		verbose_name='EAN Code or any code that could identify the Item',
 		default=0)
 	year = models.PositiveSmallIntegerField(default=2000)
-	artist = models.TextField(
-	blank=False
-	)
+	artist = models.ForeignKey(
+		'Artist',
+		blank=False,
+		)
 	id = models.AutoField(primary_key=True)
 	class Meta:
 		ordering = ('id',)
