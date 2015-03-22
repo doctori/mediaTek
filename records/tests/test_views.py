@@ -17,7 +17,8 @@ class RecordViewTest(TestCase):
 		response = self.client.post('/records/new', data={'name':''})
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'home.html')
-		
+	# Need to decide which form will be used on home page
+	@skip
 	def test_validation_errors_are_shown_on_home_page(self):
 		response = self.client.post('/records/new', data={'name':'','artist':''})
 		self.assertContains(response, escape(EMPTY_ITEM_ERROR))
@@ -203,6 +204,7 @@ class ArtistViewTest(TestCase):
 		self.assertContains(response,'item2')
 		self.assertNotContains(response,'item3')
 		self.assertNotContains(response,'item4')
+
 		
 class HomePageTest(TestCase):
 
@@ -210,10 +212,15 @@ class HomePageTest(TestCase):
 		response = self.client.get('/')
 		self.assertTemplateUsed(response, 'home.html')
 	
-	def test_home_page_uses_record_form(self):
+	def test_home_page_DONT_uses_record_form(self):
 		response = self.client.get('/')
-		self.assertIsInstance(response.context['form'],RecordForm)
+		self.assertNotIsInstance(response.context['minimalRecordForm'],RecordForm)
 
+	def test_home_page_display_artists(self):
+		artist1 = Artist.objects.create(name='artist1 with complicated String')
+		artist1.save()
+		response = self.client.get('/')
+		self.assertContains(response,artist1.name)
 	
 		
 

@@ -19,7 +19,21 @@ class RecordForm(forms.models.ModelForm):
 		}
 	def save(self):
 		return super().save()
-		
+class MinimalRecordForm(forms.models.ModelForm):
+	class Meta:
+		model = Record
+		fields = ('name','artist','ean')
+		widgets= {
+			'name': forms.fields.TextInput(attrs={
+			'placeholder': 'Name of the Record',
+			'class': "form-control input-lg",
+			}),
+		}
+		error_messages = {
+			'name': {'required':EMPTY_ITEM_ERROR}
+		}
+	def save(self):
+		return super().save()
 class ExistingArtistRecordForm(RecordForm):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)

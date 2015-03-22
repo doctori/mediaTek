@@ -1,13 +1,14 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.core.exceptions import ValidationError
 from records.forms import (
-	RecordForm,ArtistForm, EMPTY_ITEM_ERROR,
+	RecordForm,ArtistForm,MinimalRecordForm, EMPTY_ITEM_ERROR,
 	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm
 	)
 from records.models import Record, Artist
 
 def home_page(request):
-	return render(request, 'home.html',{'form':RecordForm()})
+	artists = Artist.objects.all()
+	return render(request, 'home.html',{'artists':artists,'minimalRecordForm':MinimalRecordForm()})
 
 def view_record(request,record_id):
 	#We retrieve the record object from the URL
@@ -17,7 +18,7 @@ def view_record(request,record_id):
 	if form.is_valid():
 		form.save()
 		return redirect(record)
-	return render(request, 'record.html',{'record':record, 'form':form})
+	return render(request, 'record.html',{'record':record, 'form':form,'minimalRecordForm':MinimalRecordForm()})
 
 def new_record(request):
 	form = RecordForm(data=request.POST)
@@ -35,4 +36,4 @@ def view_artist(request,artist_id):
 	if form.is_valid():
 		form.save()
 		return redirect(artist)
-	return render(request, 'artist.html',{'artist':artist,'form':form})
+	return render(request, 'artist.html',{'artist':artist,'form':form,'minimalRecordForm':MinimalRecordForm()})

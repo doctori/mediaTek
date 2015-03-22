@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
 
 {% block header_text %}{{ record.name }}{% endblock %}
-{% block form_action %}{% url 'view_record' record.id %}{% endblock %}
 
+{% block record_form %}
+	<form method="POST" action="{% url 'view_record' record.id  %}">
+	  
+		{% csrf_token %}
+		  {{ form }}
+		{% if form.errors %}
+			<div class="form-group has-error">
+				<div class="help-block">{{ form.text.errors }}</div>
+			</div>
+		{% endif %}
+	</form>
+{% endblock %}
 {% block table %}
     <table id="id_list_table" class="table">
         {% for field in form %}

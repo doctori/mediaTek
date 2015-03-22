@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
 
 {% block header_text %}Welcome to the MediaTek{% endblock %}
-{% block form_action %}{% url 'new_record' %}{% endblock %}
+
+{% block table %}
+    <div id="id_list_table" class="list-group">
+        {% for artist in artists %}
+            <a href="{% url 'view_artist' artist.id %}" class="list-group-item">{{ artist.name }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}

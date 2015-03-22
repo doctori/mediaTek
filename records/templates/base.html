@@ -1,3 +1,4 @@
+{% load bootstrap %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,6 +14,7 @@
 
     <nav class="navbar navbar-default" role="navigation">
         <a class="navbar-brand" href="/">MediaTek</a>
+		<button class="btn navbar-btn navbar-left" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</button>
         {% if user.email %}
            <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
             <span class="navbar-text navbar-right">Logged in as {{ user.email }}</span>
@@ -21,25 +23,13 @@
         {% endif %}
     </nav>
 
-    <div class="row">
+  <div class="row">
         <div class="col-md-6 col-md-offset-3 jumbotron">
             <div class="text-center">
                 <h1>{% block header_text %}{% endblock %}</h1>
-
-                {% block record_form %}
-                <form method="POST" action="{% block form_action %}{% endblock %}">
-                  
-                    {% csrf_token %}
-					  {{ form }}
-                    {% if form.errors %}
-                        <div class="form-group has-error">
-                            <div class="help-block">{{ form.text.errors }}</div>
-                        </div>
-                    {% endif %}
-                </form>
-                {% endblock %}
-
-            </div>
+				{% block record_form %}
+				{% endblock %}
+			  </div>
         </div>
     </div>
 
@@ -50,7 +40,34 @@
         </div>
     </div>
 
-    <div class="row">
+<!-- Modal -->
+<div class="modal fade" id="NewRecordModal" tabindex="-1" role="dialog" aria-labelledby="NewRecord" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="NewRecord">New Record</h4>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'new_record'  %}">
+	  
+		{% csrf_token %}
+		  {{ minimalRecordForm|bootstrap }}
+		{% if form.errors %}
+			<div class="form-group has-error">
+				<div class="help-block">{{ form.text.errors }}</div>
+			</div>
+		{% endif %}
+	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+   <div class="row">
         <div class="col-md-6 col-md-offset-3">
             {% block extra_content %}
             {% endblock %}
@@ -62,6 +79,7 @@
 <script src="https://login.persona.org/include.js"></script>
 <script src="/static/accounts.js"></script>
 <script src="/static/list.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <script>
     /*global $, mediaTek, navigator */
     $(document).ready(function () {

@@ -24,6 +24,7 @@ class Record(models.Model):
 	artist = models.ForeignKey(
 		'Artist',
 		blank=False,
+		related_name='records',
 		)
 	id = models.AutoField(primary_key=True)
 	class Meta:
