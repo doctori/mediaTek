@@ -5,5 +5,5 @@ FROM nginx
  RUN apt-get install -y python3-pip
  RUN apt-get clean all
  ADD requirements.txt /app/
- RUN pip-3.2 install requirements.txt
- ADD . /app/ 
+ RUN pip-3.2 install -r requirements.txt
+ ADD .. /app/ 
