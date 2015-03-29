@@ -62,8 +62,12 @@ WSGI_APPLICATION = 'mediaTek.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mediatek',
+	'USER': 'mediatekFront',
+	'PASSWORD': 'medi@T€KFr0nt',
+	'HOST':'127.0.0.1',
+	'PORT':'5432',	
     }
 }
 
