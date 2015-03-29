@@ -1,0 +1,4 @@
+django==1.7.4
+gunicorn==18.0
+wsgiref==0.1.2
+django-bootstrap-form
