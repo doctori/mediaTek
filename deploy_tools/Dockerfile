@@ -1,4 +1,4 @@
-FROM debian
+FROM nginx
  RUN apt-get update
  RUN apt-get install -y python3.2
  RUN apt-get install -y python3-pip
