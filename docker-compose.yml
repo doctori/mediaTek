@@ -8,4 +8,5 @@ web:
   links:
     - db
 db:
-  image: postgres
+  build: deploy_tools/db/
+  

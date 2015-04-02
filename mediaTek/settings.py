@@ -64,9 +64,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'mediatek',
-	'USER': 'mediatekFront',
-	'PASSWORD': 'medi@T€KFr0nt',
-	'HOST':'127.0.0.1',
+	'USER': 'mediatek',
+	'PASSWORD':'mediatek',
+	'HOST':'db',
 	'PORT':'5432',	
     }
 }
