@@ -39,7 +39,7 @@ INSTALLED_APPS = (
 	'records',	
 	'accounts',
 	'functional_tests',
-	'bootstrapform'
+	'bootstrap3'
 )
 
 MIDDLEWARE_CLASSES = (

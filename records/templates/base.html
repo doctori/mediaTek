@@ -1,4 +1,4 @@
-{% load bootstrap %}
+{% load bootstrap3 %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/static/base.css" rel="stylesheet" media="screen">
+	{% bootstrap_css %}
+	
 </head>
 
 <body>
@@ -52,12 +54,17 @@
         <form method="POST" action="{% url 'new_record'  %}">
 	  
 		{% csrf_token %}
-		  {{ minimalRecordForm|bootstrap }}
+		  {% bootstrap_form  minimalRecordForm %}
 		{% if form.errors %}
 			<div class="form-group has-error">
 				<div class="help-block">{{ form.text.errors }}</div>
 			</div>
 		{% endif %}
+		  {% buttons %}
+			<button type="submit" class="btn btn-primary">
+				{% bootstrap_icon "star" %} Submit
+			</button>
+		{% endbuttons %}
 	</form>
       </div>
       <div class="modal-footer">
@@ -80,6 +87,7 @@
 <script src="/static/accounts.js"></script>
 <script src="/static/list.js"></script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+{% bootstrap_javascript %}
 <script>
     /*global $, mediaTek, navigator */
     $(document).ready(function () {
