@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header_text %}{{ artist.name }}{% endblock %}
+{% block record_form %}
+	<form method="POST" action="{% url 'view_artist' artist.id  %}">
+	  
+		{% csrf_token %}
+		  {{ form }}
+		{% if form.errors %}
+			<div class="form-group has-error">
+				<div class="help-block">{{ form.text.errors }}</div>
+			</div>
+		{% endif %}
+	</form>
+{% endblock %}
+          
+{% block table %}
+    <div id="id_list_table" class="list-group">
+        {% for record in artist.records_set.all %}
+            <a href="{% url 'view_artist' record.id %}" class="list-group-item">{{ record.name }} : {{ record.year }} </a>
+        {% endfor %}
+    </div>
+{% endblock %}
