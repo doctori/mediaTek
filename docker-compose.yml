@@ -1,6 +1,6 @@
 web:
   build: .
-  command: python3.2 manage.py runserver 0.0.0.0:8000
+  command: bash /src/start-srv.sh
   volumes:
     - .:/app
   ports:

@@ -6,3 +6,4 @@ FROM nginx
  RUN apt-get clean all
  ADD requirements.txt /app/
  RUN pip-3.2 install -r requirements.txt
+ ADD deploy_tools/start-srv.sh /src/

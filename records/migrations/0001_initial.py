@@ -14,8 +14,10 @@ class Migration(migrations.Migration):
             name='Artist',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.TextField(default='')),
             ],
             options={
+                'ordering': ('id',),
             },
             bases=(models.Model,),
         ),
@@ -24,7 +26,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.TextField(default='')),
-                ('artist', models.ForeignKey(default=None, to='records.Artist')),
+                ('artist',models.ForeignKey(related_name='records', to='records.Artist')),
+                ('ean', models.BigIntegerField(default=0, unique=True, verbose_name='EAN Code or any code that could identify the Item')),
+                ('year',models.PositiveSmallIntegerField(default=2000)),
             ],
             options={
                 'ordering': ('id',),
