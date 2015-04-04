@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Javascript tests</title>
-    <link rel="stylesheet" href="../../../superlists/static/tests/qunit.css">
+    <link rel="stylesheet" href="../../../mediaTek/static/tests/qunit.css">
 </head>
 
 <body>
@@ -11,12 +11,12 @@
     <div id="qunit-fixture">
     <a id="id_login">Sign in</a>
     </div>
-	<script src="../../../superlists/static/jquery.min.js"></script>
-	<script src="../../../superlists/static/tests/qunit.js"></script>
-	<script src="../../../superlists/static/tests/sinon.js"></script>
+	<script src="../../../mediaTek/static/jquery.min.js"></script>
+	<script src="../../../mediaTek/static/tests/qunit.js"></script>
+	<script src="../../../mediaTek/static/tests/sinon.js"></script>
 	<script src="../accounts.js"></script>
 	<script>
-	/*global $, test, equal, sinon, Superlists */
+	/*global $, test, equal, sinon, mediaTek */
 	test("initialize binds sign in button to navigator.id.request", function () {
 		var requestWasCalled = false; 
 		var mockRequestFunction = function () { requestWasCalled = true; }; //
@@ -26,7 +26,7 @@
 				watch: function(){}
 			}
 		};
-		Superlists.Accounts.initialize(mockNavigator); 
+		mediaTek.Accounts.initialize(mockNavigator); 
 		equal(requestWasCalled,false, 'check request not called before click')
 		$('#id_login').trigger('click'); 
 		equal(requestWasCalled, true,'check request called after id_login click'); 
@@ -53,7 +53,7 @@
 	});
 
 	test("initialize calls navigator.id.watch", function () {
-		Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+		mediaTek.Accounts.initialize(mockNavigator, user, token, urls);
 		equal(
 			mockNavigator.id.watch.calledOnce, //
 			true,
@@ -61,13 +61,13 @@
 		);
 	});
 	test("watch sees current user", function () {
-		Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+		mediaTek.Accounts.initialize(mockNavigator, user, token, urls);
 		var watchCallArgs = mockNavigator.id.watch.firstCall.args[0];
 		equal(watchCallArgs.loggedInUser, user, 'check user');
 		
 	});
 	test("onlogin does ajax post to login url", function () {
-		Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+		mediaTek.Accounts.initialize(mockNavigator, user, token, urls);
 		var onloginCallback = mockNavigator.id.watch.firstCall.args[0].onlogin; //
 		onloginCallback(); //
 		equal(requests.length, 1, 'check ajax request'); //
@@ -75,7 +75,7 @@
 		equal(requests[0].url, urls.login, 'check url');
 	});
 	test("onlogin sends assertion with csrf token", function () {
-		Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+		mediaTek.Accounts.initialize(mockNavigator, user, token, urls);
 		var onloginCallback = mockNavigator.id.watch.firstCall.args[0].onlogin;
 		var assertion = 'browser-id assertion';
 		onloginCallback(assertion);
@@ -86,13 +86,13 @@
 		);
 	});
 	test("onlogout is a function (maybe more)", function () {
-		Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+		mediaTek.Accounts.initialize(mockNavigator, user, token, urls);
 		var onlogoutCallback = mockNavigator.id.watch.firstCall.args[0].onlogout;
 		equal(typeof onlogoutCallback, "function", "onlogout should be a function")
 	});
 	test("onlogin post failure should do navigator.id.logout ", function () {
 		mockNavigator.id.logout = sinon.mock(); 
-		Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+		mediaTek.Accounts.initialize(mockNavigator, user, token, urls);
 		var onloginCallback = mockNavigator.id.watch.firstCall.args[0].onlogin;
 		var server = sinon.fakeServer.create(); 
 		server.respondWith([403, {}, "permission denied"]);

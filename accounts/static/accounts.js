@@ -19,7 +19,7 @@ var initialize = function (navigator, user, token, urls) {
     });
 };
 
-window.Superlists = {
+window.mediaTek = {
     Accounts: {
         initialize: initialize
     }
