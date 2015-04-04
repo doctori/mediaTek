@@ -28,7 +28,7 @@ DOMAIN = "localhost"
 ALLOWED_HOSTS = [DOMAIN]
 
 # Application definition
-
+# DEDE
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
