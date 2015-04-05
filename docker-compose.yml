@@ -4,7 +4,7 @@ web:
   volumes:
     - .:/app
   ports:
-    - "8000:8000"
+    - "80:80"
   links:
     - db
 db:
