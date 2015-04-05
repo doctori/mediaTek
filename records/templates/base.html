@@ -60,16 +60,51 @@
 				<div class="help-block">{{ form.text.errors }}</div>
 			</div>
 		{% endif %}
-		  {% buttons %}
-			<button type="submit" class="btn btn-primary">
-				{% bootstrap_icon "star" %} Submit
-			</button>
-		{% endbuttons %}
+		 
 	</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+		 {% buttons %}
+			<button type="submit" class="btn btn-primary">
+				{% bootstrap_icon "ok" %} Submit
+			</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">
+				{% bootstrap_icon "remove" %} Close</button>
+		{% endbuttons %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="NewArtistModal" tabindex="-1" role="dialog" aria-labelledby="NewArtist" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="NewArtist">New Artist</h4>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'new_artist'  %}">
+	  
+		{% csrf_token %}
+		  {% bootstrap_form minimalArtistForm %}
+		{% if form.errors %}
+			<div class="form-group has-error">
+				<div class="help-block">{{ form.text.errors }}</div>
+			</div>
+		{% endif %}
+		 
+	</form>
+      </div>
+      <div class="modal-footer">
+		 {% buttons %}
+			<button type="submit" class="btn btn-primary">
+				{% bootstrap_icon "ok" %} Submit
+			</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">
+				{% bootstrap_icon "remove" %} Close</button>
+		{% endbuttons %}
+        
       </div>
     </div>
   </div>

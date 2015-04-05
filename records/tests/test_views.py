@@ -6,7 +6,8 @@ from django.template.loader import render_to_string
 from unittest import skip
 from records.forms import (
 	RecordForm, EMPTY_ITEM_ERROR,
-	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm
+	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm,
+	MinimalRecordForm,MinimalArtistForm
 	)
 from records.models import Record, Artist
 
@@ -29,7 +30,7 @@ class RecordViewTest(TestCase):
 	
 	def test_displays_record_form(self):
 		artist = Artist.objects.create(name='dédé')
-		record = Record.objects.create(name="record1",artist=artist)
+		record = Record.objects.create(name="record1",ean=23344,artist=artist)
 		response = self.client.get('/records/%d/' % (record.id,))
 		self.assertIsInstance(response.context['form'], ExistingArtistRecordForm)
 		self.assertContains(response, record.name)
@@ -144,15 +145,21 @@ class NewRecordTest(TestCase):
 		self.assertEqual(Record.objects.count(), recordsNb+1)
 		new_record = Record.objects.first()
 		self.assertEqual(new_record.name, 'Records102')
-	@skip
+	
 	def test_redirects_after_POST(self):
-		list_ = List.objects.create()
+		artist1 = Artist.objects.create(name='artist1')
+		artist1.save()
 		response = self.client.post(
 			'/records/new',
-			data={'text': 'A new list Item'}
-        )
-		new_list = List.objects.last()
-		self.assertRedirects(response,'/records/%d/' % (new_list.id,))
+			data={
+			'name': 'Records102',
+			'year':2010,
+			'artist':artist1.id,
+			'ean':545435458
+			}
+		)
+		new_record = Record.objects.last()
+		self.assertRedirects(response,'/records/%d/' % (new_record.id,))
 	@skip
 	def test_for_invalid_input_renders_home_template(self):
 		response = self.client.post('/records/new', data={'name':''})
@@ -173,13 +180,13 @@ class NewRecordTest(TestCase):
 	def test_for_invalid_input_passes_form_to_template(self):
 		response = self.post_invalid_input()
 		self.assertIsInstance(response.context['form'],ExistingListRecordForm)
-	@skip
+	
 	def test_new_list_only_saves_item_when_necessary(self):
 		self.client.post(
 			'/records/new',
 			data={'name': ''}
 		)
-		self.assertEqual(Item.objects.count(), 0)	
+		self.assertEqual(Record.objects.count(), 0)	
 		
 class ArtistViewTest(TestCase):
 	def test_displays_artist_full_desc(self):
@@ -204,7 +211,20 @@ class ArtistViewTest(TestCase):
 		self.assertContains(response,'item2')
 		self.assertNotContains(response,'item3')
 		self.assertNotContains(response,'item4')
-
+class NewArtistTest(TestCase):
+	def test_saving_POST_request(self):
+		artistsNb = Artist.objects.count()
+		self.client.post(
+			'/artists/new',
+			data={'name': 'The Prodigy'}
+			)
+		self.assertEqual(Artist.objects.count(),artistsNb+1)
+	def test_invalid_form_redirect_home(self):
+		response = self.client.post(
+			'/artists/new',
+			data={'name':''}
+			)
+		self.assertRedirects(response,'/')
 		
 class HomePageTest(TestCase):
 
@@ -221,7 +241,14 @@ class HomePageTest(TestCase):
 		artist1.save()
 		response = self.client.get('/')
 		self.assertContains(response,artist1.name)
-	
-		
+	def test_home_page_display_quick_record_form(self):
+		response = self.client.get('/')
+		self.assertContains(response,'<button class="btn navbar-btn navbar-left" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</button>')
+	def test_home_page_uses_quick_record_creation(self):
+		response = self.client.get('/')
+		self.assertIsInstance(response.context['minimalRecordForm'],MinimalRecordForm)
+	def test_home_page_use_quick_artist_creation(self):
+		response = self.client.get('/')
+		self.assertIsInstance(response.context['minimalArtistForm'],MinimalArtistForm)
 
 

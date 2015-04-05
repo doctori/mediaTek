@@ -15,7 +15,8 @@ class RecordForm(forms.models.ModelForm):
 			}),
 		}
 		error_messages = {
-			'name': {'required':EMPTY_ITEM_ERROR}
+			'name': {'required':EMPTY_ITEM_ERROR},
+			'ean': {'required':EMPTY_ITEM_ERROR}
 		}
 	def save(self):
 		return super().save()
@@ -34,6 +35,23 @@ class MinimalRecordForm(forms.models.ModelForm):
 		}
 	def save(self):
 		return super().save()
+class MinimalArtistForm(forms.models.ModelForm):
+	class Meta:
+		model = Artist
+		fields = ('name',)
+		widgets= {
+			'name': forms.fields.TextInput(attrs={
+			'placeholder': 'Name of the Artist',
+			'class': "form-control input-lg",
+			}),
+		}
+		error_messages = {
+			'name': {'required':EMPTY_ITEM_ERROR}
+		}
+	def save(self):
+		return super().save()
+
+
 class ExistingArtistRecordForm(RecordForm):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -57,7 +75,7 @@ class ArtistForm(forms.models.ModelForm):
 			}),
 		}
 		error_messages = {
-			'name': {'required':EMPTY_ITEM_ERROR}
+			'name': {'required':EMPTY_ITEM_ERROR},
 		}
 		
 		

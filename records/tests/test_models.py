@@ -82,17 +82,16 @@ class ArtistAndRecordsModelsTest(TestCase):
 		with self.assertRaises(IntegrityError):
 			record.save()
 			record.full_clean()
-	@skip	
 	def test_cannot_save_empty_ean_in_record(self):
-		artistName = 'The Prodigy'
+		artist = Artist.objects.create(name='The Prodigy')
 		record = Record(
 			name = 'Invaders Must Dive',
-			artist = artistName,
+			artist = artist,
 			year = 2016)
 		with self.assertRaises(ValidationError):
 			record.save()
 			record.full_clean()
-	@skip
+
 	def test_cannot_save_empty_artist_name(self):
 		artist = Artist.objects.create(name='')
 		with self.assertRaises(ValidationError):

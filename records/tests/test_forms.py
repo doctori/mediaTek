@@ -2,7 +2,8 @@ from django.test import TestCase
 from unittest import skip
 from records.forms import (
 	ArtistForm,RecordForm, EMPTY_ITEM_ERROR,
-	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm
+	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm,
+	MinimalRecordForm
 	)
 from records.models import Record, Artist
 
@@ -97,4 +98,10 @@ class ArtistFormTest(TestCase):
 		new_artist=form.save()
 		self.assertEqual(new_artist, Artist.objects.last())
 		self.assertEqual(new_artist.name, 'The Prodigy')
-		
+class MinimalRecordFormTest(TestCase):
+	def test_form_render_record_input(self):
+		form = MinimalRecordForm()
+		self.assertIn('placeholder="Name of the Record"', form.as_p())
+		self.assertIn('class="form-control input-lg"', form.as_p())
+
+
