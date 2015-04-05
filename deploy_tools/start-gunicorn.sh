@@ -27,6 +27,4 @@ exec /usr/local/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
   --user=$USER --group=$GROUP \
   --bind=unix:$SOCKFILE \
   --log-level=debug \
-  --error-logfile=${LOGDIR}/error-$NAME.log \
-  --access-LOGDIR=${logfile}/acces-$NAME.log
 
