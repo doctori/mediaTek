@@ -17,10 +17,15 @@ class Record(models.Model):
 	name = models.TextField(default='')
 	ean = models.BigIntegerField(
 		unique=True,
+		null=True,
 		blank=False,
 		verbose_name='EAN Code or any code that could identify the Item',
 	)
-	year = models.PositiveSmallIntegerField(default=2000)
+	year = models.PositiveSmallIntegerField(
+		default=2000,
+		blank=True,
+		null=True
+		)
 	artist = models.ForeignKey(
 		'Artist',
 		blank=False,

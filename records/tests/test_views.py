@@ -137,11 +137,10 @@ class NewRecordTest(TestCase):
 			'/records/new',
 			data={
 			'name': 'Records102',
-			'year':2010,
 			'artist':artist1.id,
 			'ean':545435456
 			}
-        )
+        	)
 		self.assertEqual(Record.objects.count(), recordsNb+1)
 		new_record = Record.objects.first()
 		self.assertEqual(new_record.name, 'Records102')
@@ -224,7 +223,7 @@ class NewArtistTest(TestCase):
 			'/artists/new',
 			data={'name':''}
 			)
-		self.assertRedirects(response,'/')
+		self.assertTemplateUsed(response,'home.html')
 		
 class HomePageTest(TestCase):
 
@@ -241,9 +240,12 @@ class HomePageTest(TestCase):
 		artist1.save()
 		response = self.client.get('/')
 		self.assertContains(response,artist1.name)
-	def test_home_page_display_quick_record_form(self):
+	def test_home_page_display_quick_record_button(self):
 		response = self.client.get('/')
 		self.assertContains(response,'<button class="btn navbar-btn navbar-left" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</button>')
+	def test_home_page_display_quick_artist_button(self):
+		response = self.client.get('/')
+		self.assertContains(response,'<button class="btn navbar-btn navbar-left" id="new_artist" data-toggle="modal" data-target="#NewArtistModal">New Artist</button>')
 	def test_home_page_uses_quick_record_creation(self):
 		response = self.client.get('/')
 		self.assertIsInstance(response.context['minimalRecordForm'],MinimalRecordForm)

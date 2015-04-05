@@ -17,6 +17,8 @@
     <nav class="navbar navbar-default" role="navigation">
         <a class="navbar-brand" href="/">MediaTek</a>
 		<button class="btn navbar-btn navbar-left" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</button>
+		<button class="btn navbar-btn navbar-left" id="new_artist" data-toggle="modal" data-target="#NewArtistModal">New Artist</button>
+        
         {% if user.email %}
            <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
             <span class="navbar-text navbar-right">Logged in as {{ user.email }}</span>
@@ -61,7 +63,7 @@
 			</div>
 		{% endif %}
 		 
-	</form>
+
       </div>
       <div class="modal-footer">
 		 {% buttons %}
@@ -71,7 +73,7 @@
 			<button type="button" class="btn btn-default" data-dismiss="modal">
 				{% bootstrap_icon "remove" %} Close</button>
 		{% endbuttons %}
-        
+	</form>        
       </div>
     </div>
   </div>
@@ -94,7 +96,7 @@
 			</div>
 		{% endif %}
 		 
-	</form>
+	
       </div>
       <div class="modal-footer">
 		 {% buttons %}
@@ -104,7 +106,7 @@
 			<button type="button" class="btn btn-default" data-dismiss="modal">
 				{% bootstrap_icon "remove" %} Close</button>
 		{% endbuttons %}
-        
+        </form>
       </div>
     </div>
   </div>
