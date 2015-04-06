@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
-
+{% load bootstrap3 %}
 {% block header_text %}{{ record.name }}{% endblock %}
 
 {% block record_form %}
 	<form method="POST" action="{% url 'view_record' record.id  %}">
-	  
 		{% csrf_token %}
-		  {{ form }}
+		  {% bootstrap_form form %}
 		{% if form.errors %}
 			<div class="form-group has-error">
 				<div class="help-block">{{ form.text.errors }}</div>
 			</div>
 		{% endif %}
+		{% buttons %}
+			<button type="submit" class="btn btn-primary">
+				{% bootstrap_icon "ok" %} Submit
+			</button>
+		{% endbuttons %}
 	</form>
 {% endblock %}
 {% block table %}

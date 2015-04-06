@@ -14,18 +14,31 @@
 <body>
 <div class="container">
 
-    <nav class="navbar navbar-default" role="navigation">
-        <a class="navbar-brand" href="/">MediaTek</a>
-		<button class="btn navbar-btn navbar-left" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</button>
-		<button class="btn navbar-btn navbar-left" id="new_artist" data-toggle="modal" data-target="#NewArtistModal">New Artist</button>
-        
-        {% if user.email %}
-           <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
-            <span class="navbar-text navbar-right">Logged in as {{ user.email }}</span>
-        {% else %}
-            <a class="btn navbar-btn navbar-right" id="id_login" href="#">Sign in</a>
-        {% endif %}
-    </nav>
+
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+		 <div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+      		</button>
+      	<a class="navbar-brand" href="/">MediaTek</a>
+    </div>
+		
+			<ul class="nav navbar-nav">
+				<li><a href="#" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</a></li>
+				<li><a href="#" id="new_record" data-toggle="modal" data-target="#NewArtistModal">New Artist</a></li>
+			</ul>
+			{% if user.email %}
+			   <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
+			    <span class="navbar-text navbar-right">Logged in as {{ user.email }}</span>
+			{% else %}
+			    <a class="btn navbar-btn navbar-right" id="id_login" href="#">Sign in</a>
+			{% endif %}
+			</div>
+	</nav>
 
   <div class="row">
         <div class="col-md-6 col-md-offset-3 jumbotron">

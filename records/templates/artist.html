@@ -17,7 +17,7 @@
 {% block table %}
     <div id="id_list_table" class="list-group">
         {% for record in artist.records_set.all %}
-            <a href="{% url 'view_artist' record.id %}" class="list-group-item">{{ record.name }} : {{ record.year }} </a>
+            <a href="{% url 'view_record' record.id %}" class="list-group-item">{{ record.name }} : {{ record.year }} </a>
         {% endfor %}
     </div>
 {% endblock %}

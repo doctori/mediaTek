@@ -210,6 +210,13 @@ class ArtistViewTest(TestCase):
 		self.assertContains(response,'item2')
 		self.assertNotContains(response,'item3')
 		self.assertNotContains(response,'item4')
+	def test_record_link_to_record_desc(self):
+		first_artist = Artist.objects.create(name='artist1')
+		Record.objects.create(name = 'item1',artist=first_artist,ean=12345)
+		record2=Record.objects.create(name = 'item2',artist=first_artist,ean=12346)
+		response = self.client.get('/artists/%d/' % (first_artist.id,))
+		self.assertContains(response,'/records/%d/' % (record2.id))
+
 class NewArtistTest(TestCase):
 	def test_saving_POST_request(self):
 		artistsNb = Artist.objects.count()
