@@ -249,15 +249,18 @@ class HomePageTest(TestCase):
 		self.assertContains(response,artist1.name)
 	def test_home_page_display_quick_record_button(self):
 		response = self.client.get('/')
-		self.assertContains(response,'<button class="btn navbar-btn navbar-left" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</button>')
+		self.assertContains(response,'<a href="#" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</a>')
 	def test_home_page_display_quick_artist_button(self):
 		response = self.client.get('/')
-		self.assertContains(response,'<button class="btn navbar-btn navbar-left" id="new_artist" data-toggle="modal" data-target="#NewArtistModal">New Artist</button>')
+		self.assertContains(response,'<a href="#" id="new_artist" data-toggle="modal" data-target="#NewArtistModal">New Artist</a>')
 	def test_home_page_uses_quick_record_creation(self):
 		response = self.client.get('/')
 		self.assertIsInstance(response.context['minimalRecordForm'],MinimalRecordForm)
 	def test_home_page_use_quick_artist_creation(self):
 		response = self.client.get('/')
 		self.assertIsInstance(response.context['minimalArtistForm'],MinimalArtistForm)
+	def test_home_page_have_a_searh_box(self):
+		response = self.client.get('/')
+		self.assertContains(response,'role="search"')
 
 
