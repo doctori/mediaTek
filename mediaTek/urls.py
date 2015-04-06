@@ -8,4 +8,5 @@ urlpatterns = patterns('',
 	url(r'^artists/new$',record_views.new_artist,name='new_artist'),
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^accounts/', include('accounts.urls')),
+	url(r'^search/', include('haystack.urls')),
 )

@@ -39,7 +39,8 @@ INSTALLED_APPS = (
 	'records',	
 	'accounts',
 	'functional_tests',
-	'bootstrap3'
+	'bootstrap3',
+	'haystack',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -97,6 +98,13 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'mediaTek','static'),
 )
+#HAYSTACK
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -3,3 +3,5 @@ gunicorn==18.0
 wsgiref==0.1.2
 psycopg2
 django-bootstrap3
+Whoosh
+django-haystack
