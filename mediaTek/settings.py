@@ -40,6 +40,7 @@ INSTALLED_APPS = (
 	'accounts',
 	'functional_tests',
 	'bootstrap3',
+	'whoosh',
 	'haystack',
 )
 
@@ -102,7 +103,7 @@ STATICFILES_DIRS = (
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+        'PATH': os.path.join(BASE_DIR, 'whoosh'),
     },
 }
 LOGGING = {
