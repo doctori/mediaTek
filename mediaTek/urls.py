@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from records import views as record_views
+from search.views import search_view
+
 urlpatterns = patterns('',
 	url(r'^$', record_views.home_page, name='home'),
 	url(r'^records/', include('records.urls')),
@@ -8,5 +10,5 @@ urlpatterns = patterns('',
 	url(r'^artists/new$',record_views.new_artist,name='new_artist'),
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^accounts/', include('accounts.urls')),
-	url(r'^search/', include('haystack.urls')),
-)
+	url(r'^search/', search_view,name='search_view'),
+	)

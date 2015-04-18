@@ -99,13 +99,17 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'mediaTek','static'),
 )
+
+WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh/')
 #HAYSTACK
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh'),
+        'PATH': WHOOSH_INDEX,
     },
 }
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
