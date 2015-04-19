@@ -2,12 +2,25 @@ from django import forms
 from django.core.exceptions import ValidationError
 from records.models import Record, Artist
 from haystack.forms import SearchForm
+from haystack.query import EmptySearchQuerySet, SearchQuerySet
+from haystack.inputs import Clean
+import logging
 
 EMPTY_ITEM_ERROR = 'Impossible d\'avoir un élement Vide'
 DUPLICATE_ITEM_ERROR = "L'element existe déjà"
 class RecordSearchForm(SearchForm):
 	def no_query_found(self):
 		return self.searchqueryset.all()
+	def search(self):
+		if not self.is_valid():
+			return self.no_query_found()
+
+		#sqs = self.searchqueryset
+		sqs = SearchQuerySet().filter(content__icontains=self.cleaned_data['q'])
+		if self.load_all:
+			sqs = sqs.load_all()
+
+		return sqs
 		
 class RecordForm(forms.models.ModelForm):
 	class Meta:
