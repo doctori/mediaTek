@@ -1,16 +1,20 @@
+import logging
 from haystack.views import basic_search
 from records.forms import (
-	RecordForm,ArtistForm,MinimalRecordForm, EMPTY_ITEM_ERROR,
-	DUPLICATE_ITEM_ERROR,ExistingArtistRecordForm,
-	MinimalArtistForm
+	RecordForm,ArtistForm,RecordSearchForm,
+	MinimalRecordForm,MinimalArtistForm
 	)
+from django.shortcuts import render_to_response
 
 
-def search_view(request):
+def search_view(request): 
+	form = RecordSearchForm(request.GET)
+	records = form.search()
 	minimalRecordForm=MinimalRecordForm()
 	minimalArtistForm=MinimalArtistForm()
 	
-	return basic_search(request, extra_context={
+	return render_to_response('search.html',{
 		'minimalRecordForm': minimalRecordForm,
-		'minimalArtistForm': minimalArtistForm})
+		'minimalArtistForm': minimalArtistForm,
+		'records': records})
 

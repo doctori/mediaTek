@@ -31,11 +31,11 @@
 				<li><a href="#" id="new_record" data-toggle="modal" data-target="#NewRecordModal">New Record</a></li>
 				<li><a href="#" id="new_artist" data-toggle="modal" data-target="#NewArtistModal">New Artist</a></li>
 			</ul>
-			<form class="navbar-form navbar-left" role="search">
+			<form class="navbar-form navbar-right" method="get" role="search" action="search">
         		<div class="form-group">
-          			<input type="text" class="form-control" placeholder="Search">
+          			<input type="text" name="q" class="form-control" placeholder="Search">
         		</div>
-        		<button type="submit" class="btn btn-default">Submit</button>
+        		<button type="submit" class="btn btn-default">Search</button>
       		</form>
 			{% if user.email %}
 			   <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
