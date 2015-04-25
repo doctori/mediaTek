@@ -16,7 +16,7 @@ class RecordSearchForm(SearchForm):
 			return self.no_query_found()
 
 		#sqs = self.searchqueryset
-		sqs = SearchQuerySet().filter(content__icontains=self.cleaned_data['q'])
+		sqs = SearchQuerySet().filter(text__contains=self.cleaned_data['q']).load_all();
 		if self.load_all:
 			sqs = sqs.load_all()
 

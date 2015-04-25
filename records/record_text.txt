@@ -1,0 +1,4 @@
+{{ object.name }}
+{{ object.artist }}
+{{ object.year }}
+{{ object.ean }}

@@ -3,5 +3,5 @@ sleep 15;
 python3 manage.py migrate --noinput
 python3 manage.py collectstatic --noinput
 python3 manage.py rebuild_index --noinput
-chmod 777
- supervisord -c /etc/supervisor/supervisord.conf -n
+chmod 777 -R whoosh
+supervisord -c /etc/supervisor/supervisord.conf -n
