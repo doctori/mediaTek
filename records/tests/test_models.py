@@ -21,12 +21,16 @@ class ArtistAndRecordsModelsTest(TestCase):
 			name = 'Invaders Must Die',
 			artist = artist1,
 			year = 2012,
-			ean = 711297880113)
+			ean = 711297880113,
+			description ="Vonderfull Album",
+			rating = 3.5,
+			label='Imports')
 		record.save()
 		self.assertIn(record.name,'Invaders Must Die')
 		self.assertIn(record.artist.name,'The Prodigy')
 		self.assertIn(str(record.year),'2012')
 		self.assertIn(str(record.ean),str(711297880113))
+		self.assertIn(str(record.description),"Vonderfull Album")
 		
 	def test_record_ean_is_unique(self):
 		artist1 = Artist.objects.create(

@@ -31,7 +31,19 @@ class Record(models.Model):
 		blank=False,
 		related_name='records',
 		)
+	description = models.TextField(
+		default='',
+		blank=True)
+	label = models.TextField(
+		default='',
+		blank=True)
+	rating = models.DecimalField(
+		blank=True,
+		null=True,
+		max_digits=5,
+		decimal_places=2)
 	id = models.AutoField(primary_key=True)
+	
 	class Meta:
 		ordering = ('id',)
 		unique_together = ('artist','name')

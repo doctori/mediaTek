@@ -14,6 +14,9 @@ class RecordFormTest(TestCase):
 		self.assertIn('placeholder="Name of the Record"', form.as_p())
 		self.assertIn('class="form-control input-lg"', form.as_p())
 
+	def test_form_renders_desired_items(self):
+		form = RecordForm()
+		
 	def test_form_validation_for_blank_items(self):
 		form = RecordForm(data={
 			'name':'',

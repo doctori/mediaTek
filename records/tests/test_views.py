@@ -43,14 +43,33 @@ class RecordViewTest(TestCase):
 			name="record1",
 			year=2012,
 			artist=artist1,
+			ean=711297880113,
+			description="Super Great Album",
+			label="Imports"
+			)
+		response = self.client.get('/records/%d/' % (record.id,))
+		self.assertContains(response, record.name)
+		self.assertContains(response, record.year)
+		self.assertContains(response, record.ean)
+		self.assertContains(response, record.label)
+		self.assertContains(response, record.description)
+		
+	def test_displays_artist_full_name_on_record_view(self):
+		artist1 = Artist.objects.create(
+			name='Prodigy'
+		)
+		artist1.save()
+		record = Record.objects.create(
+			name="record1",
+			year=2012,
+			artist=artist1,
 			ean=711297880113
 			)
 		response = self.client.get('/records/%d/' % (record.id,))
 		self.assertContains(response, record.name)
 		self.assertContains(response, record.year)
-		self.assertContains(response, record.artist)
+		self.assertContains(response, artist1.name)
 		self.assertContains(response, record.ean)
-		
 		
 	def test_can_save_a_POST_request_to_an_existing_artist(self):
 		artist = Artist.objects.create(name='artist1')

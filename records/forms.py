@@ -25,7 +25,7 @@ class RecordSearchForm(SearchForm):
 class RecordForm(forms.models.ModelForm):
 	class Meta:
 		model = Record
-		fields = ('name','year','artist','ean')
+		fields = ('name','year','artist','ean','description','label')
 		widgets= {
 			'name': forms.fields.TextInput(attrs={
 			'placeholder': 'Name of the Record',
